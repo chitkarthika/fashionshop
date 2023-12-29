@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription  %}
+    {% if category %}
+        {{category.desc|truncatewords:155}}
+    {% else %}
+        Welcome to Fashion shop where you can buy clothing Accessories
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{category.name}}--Fashion Shop
+    {% else %}
+        See our new Collections--Fashion Shop
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+    <div class="row my_row_class">
+       <div class="mx-auto">
+        <p><a href="{% url 'ecomapp:allProdCat' %}"> Our product Collection</a></p>
+       </div>
+        </div>
+</div>
+{% endif %}
+        <div class="mx-auto">
+            {% if category %}
+                <img class="my_image" src="{{category.img.url}}" alt="{{category.name}}" style="height:500px">
+        </div><br>
+            <div>
+                <h1 class="text-center my_title text-uppercase" >{{category.name}}</h1>
+                <p class="text-justify">{{category.desc}}</p>
+            </div>
+            {% else %}
+            <div>
+                <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="Our  Products" >
+            </div><BR>
+
+            <div>
+                <h1 class="text-center my_title">Our Product Collections</h1>
+                <p class="text-justify">dummy content:Fashion is a term used interchangeably to describe the creation of clothing, footwear, accessories, cosmetics, and jewellery of different cultural aesthetics and their mix and match into outfits that depict distinctive ways of dressing (styles and trends) as signifiers of social status, self-expression, and group belonging. As a multifaceted term, fashion describes an industry, styles, aesthetics, and trends.
+                    The term 'fashion' originates from the Latin word 'Facere,' which means 'to make,' and describes the manufacturing, mixing, and wearing of outfits adorned with specific cultural aesthetics, patterns, motifs, shapes, and cuts, allowing people to showcase their group belonging, values, meanings, beliefs, and ways of life. Given the rise in mass production of commodities and clothing at lower prices and global reach, reducing fashion's environmental impact and improving sustainability has become an urgent issue among politicians, brands, and consumers.</p>
+            </div>
+            {% endif %}
+        <div class="container">
+            <div class="row mx-auto">
+                {% for product in products.object_list %}
+                <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4 mb-4">
+                    <div class="card h-100 text-center shadow bg-white rounded" style="min-width:14rem;">
+                        <a href="{{product.get_absolute_url}} "><img class="card-img-top img-fluid my_image" src="{{product.img.url}}" alt="{{product.name}}" style="width:350px;height:300px;"></a>
+
+                            <div class="card-body">
+                            <h4 class="text-uppercase">{{product.name}}</h4>
+                                <h6><i>[{{product.category}}]</i></h6>
+                             <p>PRICE:{{product.price}}</p>
+                            </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="mx-auto">
+                {% if products.paginator.num_pages > 1 %}
+
+                <hr>
+                <div class="text-center">
+                    {% for pg in products.paginator.page_range %}
+                    <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.numer == pg %} active  {% endif %}">{{pg}}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <br>
+        </div>
+{% endblock %}
